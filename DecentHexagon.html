@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>GoodGameRate5Stars</title>
-    <style>
-    canvas {
-      padding-left: 0;
-      padding-right: 0;
-      margin-left: auto;
-      margin-right: auto;
-      display: block;
-      border: 2px solid #000000;
-      border-radius: 16px;
-    }
+    <head>
+        <title>GoodGameRate5Stars</title>
+        <style>
+canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    border: 2px solid #000000;
+    border-radius: 16px;
+}
     #links {
-      font-family: Times New Roman;
-      font-size: 150%;
-      border-style: groove;
-      border-width: 2px;
-      border-radius: 8px;
-      text-align: center;
+        font-family: Times New Roman;
+        font-size: 150%;
+        border-style: groove;
+        border-width: 2px;
+        border-radius: 8px;
+        text-align: center;
     }
     a:link {
         color: black;
@@ -40,59 +40,62 @@
         background-color: transparent;
         text-decoration: none;
     }
-    </style>
-  </head>
+        </style>
+    </head>
 
-  <body>
-    <div style="text-align:center">
-      <a id="links" href="index.html">Back to mainpage</a>
-    </div>
-    <br>
-    <canvas id="canvas" width="1100" height="550"></canvas>
-    <div style="display:none;">
-      <img id="source" src="https://bendik.mort.coffee/DecentHexagon/Flames.png" width="300" height="227">
-      <img id="explosion" src="https://bendik.mort.coffee/DecentHexagon/Explosion.png" width="256" height="256">
-      <img id="treeFlame" src="https://bendik.mort.coffee/DecentHexagon/treeFlame.png" width="320" height="180">
-    </div>
-    <script src = "vector.js"></script>
-    <script src = "hexagon.js"></script>
-    <script src = "bullet.js"></script>
-    <script src = "tree.js"></script>
-    <script>
+    <body>
+        <div style="text-align:center">
+            <a id="links" href="index.html">Back to mainpage</a>
+        </div>
+        <br>
+        <canvas id="canvas" width="1100" height="550"></canvas>
+        <div style="display:none;">
+            <img id="source" src="https://bendik.mort.coffee/DecentHexagon/Flames.png" width="300" height="227">
+            <img id="explosion" src="https://bendik.mort.coffee/DecentHexagon/Explosion.png" width="256" height="256">
+            <img id="treeFlame" src="https://bendik.mort.coffee/DecentHexagon/treeFlame.png" width="320" height="180">
+        </div>
+        <script src = "vector.js"></script>
+        <script src = "hexagon.js"></script>
+        <script src = "bullet.js"></script>
+        <script src = "tree.js"></script>
+        <script>
 
-      var canvas = document.getElementById('canvas');
-      var ctx = canvas.getContext('2d');
-      var image = document.getElementById('source');
-      var explosion = document.getElementById("explosion")
-      var entities = [];
-
-      entities.push(hexagon);
-      entities.push(tree);
-      setInterval(runGame, 16.67);
-        function runGame() {
-          ctx.setTransform(1, 0, 0, 1, 0, 0);
-          ctx.translate(50, 50);
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-          for (var i in entities) {
-            if (entities[i].dead) {
-              entities.splice(i, 1);
-              if (entities[i] === undefined) continue;
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            var image = document.getElementById('source');
+            var explosion = document.getElementById("explosion")
+            var entities = [];
+            var scaleFactor = 1;
+            
+            entities.push(hexagon);
+            entities.push(tree);
+            setInterval(runGame, 16.67);
+            
+            function runGame() {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.translate(-hexagon.x * scaleFactor + canvas.width / 2, -hexagon.y * scaleFactor + canvas.height / 2);
+                ctx.scale(scaleFactor, scaleFactor);
+            
+                for (var i in entities) {
+                    if (entities[i].dead) {
+                        entities.splice(i, 1);
+                        if (entities[i] === undefined) continue;
+                    }
+                    entities[i].update();
+                    entities[i].draw();
+                }
             }
-            entities[i].update();
-            entities[i].draw();
-          }
-        }
-      window.addEventListener('keydown', function (e) {
-        hexagon.keys = (hexagon.keys || []);
-        hexagon.keys[e.keyCode] = true;
-      });
-      window.addEventListener('keyup', function (e) {
-        hexagon.keys[e.keyCode] = false;
-      });
+            window.addEventListener('keydown', function (e) {
+                hexagon.keys = (hexagon.keys || []);
+                hexagon.keys[e.keyCode] = true;
+            });
+            window.addEventListener('keyup', function (e) {
+                hexagon.keys[e.keyCode] = false;
+            });
+            
 
-
-    </script>
-  </body>
+        </script>
+    </body>
 
 </html>
